@@ -1,7 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import dayjs from "dayjs";
 
-const prisma = new PrismaClient();
+import prisma from "@/lib/prismadb";;
 
 async function getWeeklyNoticeGrowth(): Promise<number> {
     const startOfCurrentWeek = dayjs().startOf("week").toDate();

@@ -1,8 +1,7 @@
-import { PrismaClient } from "@prisma/client"
 import SettingsComponent from "./components/SettingsComponent"
 import { auth } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
-const prisma = new PrismaClient()
+import prisma from "@/lib/prismadb";
 const page = async () => {
     const { userId } = await auth()
     if (!userId) {

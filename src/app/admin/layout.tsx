@@ -1,9 +1,8 @@
 import Navbar from "./components/Navbar";
 import { auth } from "@clerk/nextjs/server";
-import { PrismaClient } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { Toaster } from "react-hot-toast";
-const prisma = new PrismaClient();
+import prisma from "@/lib/prismadb";;
 export default async function AdminLayout({
   children,
 }: Readonly<{

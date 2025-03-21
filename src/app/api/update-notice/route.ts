@@ -1,8 +1,8 @@
 import { noticeSchema } from "@/schemas/notice/noticeSchema";
 import { currentUser } from "@clerk/nextjs/server";
-import { Category, Priority, PrismaClient, Status } from "@prisma/client";
+import { Category, Priority, Status } from "@prisma/client";
 import { NextResponse } from "next/server";
-const prisma = new PrismaClient()
+import prisma from "@/lib/prismadb";
 export async function PATCH(req: Request) {
     try {
         const user = await currentUser()

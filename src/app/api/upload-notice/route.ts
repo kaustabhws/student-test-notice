@@ -1,8 +1,8 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { PrismaClient, Status, Category, Priority } from "@prisma/client";
+import { Status, Category, Priority } from "@prisma/client";
 import { noticeSchema } from "@/schemas/notice/noticeSchema";
-const prisma = new PrismaClient();
+import prisma from "@/lib/prismadb";;
 
 export async function POST(req: Request) {
     try {

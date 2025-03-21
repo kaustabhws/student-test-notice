@@ -1,7 +1,6 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
-const prisma = new PrismaClient()
+import prisma from "@/lib/prismadb";
 export async function DELETE(req: Request) {
     try {
         const user = await currentUser()

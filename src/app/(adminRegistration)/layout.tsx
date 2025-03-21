@@ -1,7 +1,6 @@
 import { auth,  } from "@clerk/nextjs/server";
-import { PrismaClient } from "@prisma/client";
 import { redirect } from "next/navigation";
-const prisma = new PrismaClient()
+import prisma from "@/lib/prismadb";
 export default async function RegistratinLayout({
     children,
 }: Readonly<{

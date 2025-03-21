@@ -1,6 +1,6 @@
-import { Category, PrismaClient } from "@prisma/client"
+import { Category } from "@prisma/client"
 
-const prisma = new PrismaClient();
+import prisma from "@/lib/prismadb";;
 
 const getCategoryDetails = async (category: Category) => {
     const count = await prisma.notice.count({
