@@ -29,7 +29,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import { Notice, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import {
   AlertCircle,
   ArrowLeft,
