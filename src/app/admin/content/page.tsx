@@ -3,16 +3,19 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import UploadNoticeComponent from "./components/UploadNoticeComponent";
-import { Notice } from "@prisma/client";
+import { Notice, Prisma } from "@prisma/client";
 import NoticeCard from "../components/NoticeCard";
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import toast from "react-hot-toast";
 
+type NoticeWithAdmin = Prisma.NoticeGetPayload<{
+  include: { admin: true };
+}>;
 
 const Page = () => {
-  const [notices, setNotices] = useState<Notice[]>([]);
+  const [notices, setNotices] = useState<NoticeWithAdmin[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setIsUploading] = useState<boolean>(false);
   const fetchNotices = async () => {
@@ -20,8 +23,7 @@ const Page = () => {
       const response = await axios.get("/api/get-notices");
       if (response.data.success) {
         const allNotices = response.data.notices;
-        console.log(allNotices)
-        const currentDate = new Date()
+        const currentDate = new Date();
         const currentMonth = currentDate.getMonth();
         const currentYear = currentDate.getFullYear();
         // Filter notices for the current month
@@ -52,12 +54,14 @@ const Page = () => {
       });
 
       if (response.data.success) {
-        setNotices((prevNotices) => prevNotices.filter((n) => n.id !== notice_id));
-        toast.success("Notice deleted successfully")
+        setNotices((prevNotices) =>
+          prevNotices.filter((n) => n.id !== notice_id)
+        );
+        toast.success("Notice deleted successfully");
       }
     } catch (error) {
-      console.error(error)
-      toast.error("Failed to delete the notice")
+      console.error(error);
+      toast.error("Failed to delete the notice");
     }
   };
 
@@ -68,47 +72,45 @@ const Page = () => {
         <div className="max-w-7xl">
           <div className="flex justify-start">
             <h2 className="text-2xl font-semibold mr-3 mb-6">Recent Notices</h2>
-          </div>{
-
-          }
+          </div>
+          {}
           {loading ? (
             // Loading skeletons
             <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-              {
-                Array.from({ length: 6 }).map((_, index) => (
-                  <Card key={index} className="overflow-hidden">
-                    <CardContent className="p-0">
-                      <div className="p-6 space-y-4">
-                        <div className="space-y-2">
-                          <Skeleton className="h-4 w-3/4" />
-                          <Skeleton className="h-4 w-1/2" />
-                        </div>
-                        <Skeleton className="h-20 w-full" />
-                        <div className="flex justify-between items-center">
-                          <Skeleton className="h-4 w-1/3" />
-                          <Skeleton className="h-8 w-8 rounded-full" />
-                        </div>
+              {Array.from({ length: 6 }).map((_, index) => (
+                <Card key={index} className="overflow-hidden">
+                  <CardContent className="p-0">
+                    <div className="p-6 space-y-4">
+                      <div className="space-y-2">
+                        <Skeleton className="h-4 w-3/4" />
+                        <Skeleton className="h-4 w-1/2" />
                       </div>
-                    </CardContent>
-                  </Card>
-                ))
-              }
+                      <Skeleton className="h-20 w-full" />
+                      <div className="flex justify-between items-center">
+                        <Skeleton className="h-4 w-1/3" />
+                        <Skeleton className="h-8 w-8 rounded-full" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
-
+          ) : notices.length === 0 ? (
+            <p className="text-muted-foreground">No notices found.</p>
           ) : (
-            (notices.length === 0) ? <p className="text-muted-foreground">No notices found.</p>
-              : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {notices.map((notice, index) => (
-                    <motion.div key={notice.id} initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.05, duration: 0.3 }}
-                      whileHover={{ y: -5 }}>
-                      <NoticeCard notice={notice} onDelete={handleDelete} />
-                    </motion.div>
-                  ))}
-                </div>
-              )
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {notices.map((notice, index) => (
+                <motion.div
+                  key={notice.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05, duration: 0.3 }}
+                  whileHover={{ y: -5 }}
+                >
+                  <NoticeCard notice={notice} onDelete={handleDelete} />
+                </motion.div>
+              ))}
+            </div>
           )}
         </div>
       </div>
